@@ -1,0 +1,7 @@
+{ 
+    "hostname": "influxdbHostName",
+    "port":     "8086",
+    "username": "username",
+    "password": "password",
+    "database": "influxDatabaseName"
+}
