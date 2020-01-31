@@ -277,7 +277,6 @@ func ConnectUpload(ctx context.Context, bucket *uplink.Bucket, data io.Reader, d
 
 // Debug function downloads the data from storj bucket after upload to verify data is uploaded successfully.
 func Debug(bucket *uplink.Bucket, configStorj ConfigStorj, lastFileName string, copied int) {
-
 	if DEBUG {
 		checkSlash := configStorj.UploadPath[len(configStorj.UploadPath)-1:]
 		if checkSlash != "/" {
@@ -288,6 +287,7 @@ func Debug(bucket *uplink.Bucket, configStorj ConfigStorj, lastFileName string, 
 		slitString := strings.Split(lastFileName, "/")
 		slitFileString := strings.Split(slitString[1], ".")
 		var lastextension string
+
 		// Configure the Prefix
 		if len(slitFileString) > 2 {
 			cfg.Prefix = configStorj.UploadPath + slitString[0] + "/" + slitFileString[0] + slitFileString[1] + slitFileString[2] + "/"
@@ -319,6 +319,7 @@ func Debug(bucket *uplink.Bucket, configStorj ConfigStorj, lastFileName string, 
 			}
 			defer strm.Close()
 			fmt.Printf("Downloading Object %s from bucket : Initiated...\n", "debug/"+lastFileName)
+
 			// Read everything from the stream.
 			receivedContents, err := ioutil.ReadAll(strm)
 
@@ -327,20 +328,27 @@ func Debug(bucket *uplink.Bucket, configStorj ConfigStorj, lastFileName string, 
 			}
 
 			if _, err := os.Stat("./debug"); os.IsNotExist(err) {
-				err1 := os.Mkdir("./debug", os.ModeDir)
+				err1 := os.Mkdir("./debug", 0755)
 				if err1 != nil {
-					log.Fatal("Invalid Download Path")
+					log.Fatal("Invalid Download Path: ", err1)
 				}
 			}
 
 			if _, err := os.Stat("./debug" + "/" + slitString[0]); os.IsNotExist(err) {
-				err1 := os.Mkdir("./debug"+"/"+slitString[0], os.ModeDir)
+				err1 := os.Mkdir("./debug"+"/"+slitString[0], 0755)
 				if err1 != nil {
-					log.Fatal("Invalid Download Path")
+					log.Fatal("Invalid Download Path: ", err1)
 				}
 			}
 
-			downloadFileDisk, _ = os.OpenFile("debug/"+lastFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			downloadFileDisk, err = os.Create("./debug"+"/"+slitString[0] + "/" + slitString[1])
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = downloadFileDisk.Write(receivedContents)
+			if err != nil {
+				log.Fatal(err)
+			}
 			_, err = downloadFileDisk.Write(receivedContents)
 			if err != nil {
 				log.Fatal(err)

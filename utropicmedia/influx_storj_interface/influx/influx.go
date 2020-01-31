@@ -27,6 +27,8 @@ type ConfigInfluxDB struct {
 	UserName   string `json:"username"`
 	Password   string `json:"password"`
 	Database   string `json:"database"`
+	Influxdb_exeutable_path string `json:"influxdb_exeutable_path"`
+//	FileStorePath string `json:"dumpFilePath"`
 }
 
 // InfluxReader implements an io.Reader interface.
@@ -63,7 +65,8 @@ func loadInfluxProperty(fullFileName string) (ConfigInfluxDB, error) { // fullFi
 	fmt.Println("UserName \t", configInfluxDB.UserName)
 	fmt.Println("Password \t", configInfluxDB.Password)
 	fmt.Println("Database \t", configInfluxDB.Database)
-
+	fmt.Println("Influxd \t",configInfluxDB.Influxdb_exeutable_path);
+//	fmt.Println("Dump File Path \t",configInfluxDB.FileStorePath);
 	return configInfluxDB, err
 }
 
@@ -90,12 +93,11 @@ func ConnectToDB(fullFileName string) (*InfluxReader, error) { // fullFileName f
 
 	defer c.Close()
 
-	fileStorePath := "./"+configInfluxDB.Database
+	fileStorePath := os.TempDir() + configInfluxDB.Database
+	fmt.Println("FIleStorePath:", fileStorePath)
     // Create command to fetch dumptsm from the database.
-
-	cmd := exec.Command("C:/Program Files/InfluxDB/Influxd.exe", "backup", "-portable", "-database", configInfluxDB.Database, "-host", configInfluxDB.HostName+":8088", fileStorePath)
-    
-	_, err = cmd.Output()
+	cmd := exec.Command("/usr/local/bin/influxd", "backup", "-portable", "-database", configInfluxDB.Database, "-host", configInfluxDB.HostName+":8088", fileStorePath)
+	_, err  = cmd.Output()
 	if err != nil {
 		log.Fatal("Export failed to execute. Error was:", err.Error())
 	}else{
@@ -104,11 +106,12 @@ func ConnectToDB(fullFileName string) (*InfluxReader, error) { // fullFileName f
 	}
     var files []string
 
-    err = filepath.Walk(fileStorePath, visit(&files))
+	err = filepath.Walk(fileStorePath, visit(&files))
     if err != nil {
+		fmt.Println("Error after backup:", err)
         panic(err)
 	}
-	return &InfluxReader{ConfigInfluxDB: configInfluxDB,File: files,Path:fileStorePath}, err
+	return &InfluxReader{ConfigInfluxDB: configInfluxDB,File: files,Path: fileStorePath}, err
 }
 
 // Read reads and copies the dumptsm into the buffer.
@@ -183,6 +186,7 @@ func FetchData(databaseReader io.Reader) ([]byte, error) { // databaseReader is 
 		err = ioutil.WriteFile(filename, allCollectionsDataBSON, 0644)
 	}
 
+	fmt.Println("FetchData", err)
 	return allCollectionsDataBSON, err
 }
 

@@ -40,6 +40,7 @@ $ go get -u ./...
         "username": "username",
         "password": "password",
         "database": "influxDatabaseName"
+        "influxdb_exeutable_path": "your/path/to/influxd-executable-file"
     }
 ```
 
