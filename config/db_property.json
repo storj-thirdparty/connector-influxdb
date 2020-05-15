@@ -1,8 +1,8 @@
 { 
-    "hostname": "influcdbHostName",
+    "hostname": "localhost",
     "port":     "8086",
-    "username": "username",
-    "password": "password",
-    "database": "influxDatabaseName",
-    "influxdb_exeutable_path": "your/path/to/influxd-executable-file"
+    "username": "",
+    "password": "",
+    "database": "StorjTest",
+    "influxdExeutablePath": "/usr/local/bin/influxd"
 }

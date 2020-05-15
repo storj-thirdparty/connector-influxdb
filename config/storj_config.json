@@ -1,13 +1,15 @@
 { 
-    "apikey":     "change-me-to-the-api-key-created-in-satellite-gui",
+    "apikey":     "13YqexB4R92aMki8LLwhmgw9MCx4opFdtGjREsFi7Rt2Dm6Ui68D8ekboDJwb6ViWjPKjnST5mUikcLPXf6JRy65B1BFMEUzfRbcBtJ",
     "satellite":  "us-central-1.tardigrade.io:7777",
-    "bucket":     "change-me-to-desired-bucket-name",
-    "uploadPath": "optionalpath/requiredfilename",
-    "encryptionpassphrase": "you'll never guess this",
-    "serializedScope": "change-me-to-the-api-key-created-in-encryption-access-apiKey",
-
-    "disallowReads": "true/false-to-disallow-reads",
-    "disallowWrites": "true/false-to-disallow-writes",
-    "disallowDeletes": "true/false-to-disallow-deletes"
+    "bucket":     "karl-influx-test",
+    "uploadPath": "out.tsm4",
+    "encryptionpassphrase": "test1234",
+    "serializedScope": "",
+    "allowDownload": "",
+	"allowUpload": "",
+	"allowList": "",
+	"allowDelete": "",
+	"notBefore": "",
+	"notAfter": ""
 }
 

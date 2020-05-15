@@ -1,5 +1,11 @@
 # Storj-influxdb Changelog
 
+## [1.0.5] - 09-05-2020
+### Changelog
+* Made changes according to the latest uplink RC v1.0.5.
+* Created module storj-influxdb that can be downloaded using `go get` command.
+* Enhanced error handling.
+
 ## [1.0.2] - 31-01-2020
 ### Changelog:
 * Added keyword `influxdb_exeutable_path`  in db_property.json to access influxd executable path.
