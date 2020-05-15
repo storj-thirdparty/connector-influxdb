@@ -1,4 +1,4 @@
-cloudbuild.yamlsteps:
+steps:
   # see https://www.npmjs.com/package/editorconfig-checker
   - id: eclint
     name: "e53e225/editorconfig-checker"  
