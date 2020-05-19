@@ -1,4 +1,4 @@
-# storj-influxdb -
+# storj-influxdb
 
 # Developed using uplink RC v1.0.5
 
@@ -66,7 +66,7 @@ git clone https://github.com/utropicmedia/storj-influxdb.git
 }
 ```
 
-* Store both these files in a `config` folder. Sample files are already provided. Make respective changes and you are good to go. Filename command-line arguments are optional. Default locations are used.
+* Store both these files in a `config` folder. Sample files are already provided. Make respective changes and you are good to go. File name command-line arguments are optional. Default locations are used.
 
 ## Description
 * Overview
@@ -103,39 +103,29 @@ $ ./storj-influxdb --help
 $ ./storj-influxdb --version
 ```
 
-* Create and read backup files from InfluxDB instance from `(./config/db_property)` and upload them to Storj bucket using API Key from `(./config/storj_config)`. 
+* Create and read backup files from InfluxDB instance and upload them to Storj bucket using API Key from `storj_config.json`.
 ```
-$ ./storj-influxdb store
+$ ./storj-influxdb store --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
 ```
 
-* Create and read backup files from InfluxDB instance from `(./config/db_property)` and upload them to Storj bucket using Access Key from `(./config/storj_config)`. 
+* Create and read backup files from InfluxDB instance and upload them to Storj bucket using Access Key from `storj_config.json`.
 ```
 $ ./storj-influxdb store --accesskey
 ```
 
-* Create and read backup files from InfluxDB instance from `(./config/db_property)` and upload them to Storj bucket using Access Key and generates Shareable Access Key based on restrictions in `(./config/storj_config)`. 
+* Create and read backup files from InfluxDB instance and upload them to Storj bucket using API Key and generate a Shareable Access Key based on restrictions in `storj_config.json`.
 ```
-$ ./storj-influxdb store --accesskey --share
-```
-
-* Create and read backup files from desired InfluxDB instance from given influx config file and upload them to given Storj bucket using API Key from `(./config/storj_config)`. 
-```
-$ ./storj-influxdb store --influx path_to_influx_config_file
+$ ./storj-influxdb store --share
 ```
 
-* Create and read backup files from InfluxDB instance from `(./config/db_property)` and upload them to given Storj bucket using Access Key from given Storj config file. 
+* Create and read backup files from InfluxDB instance and upload them to given Storj bucket using API Key from given Storj config file, further the uploaded file is downloaded from Storj to `./debug` folder.
 ```
-$ ./storj-influxdb store --storj path_to_storj_config_file
+$ ./storj-influxdb store --debug --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
 ```
-
-* Create and read backup files from InfluxDB instance `(./config/db_property)` and upload them to given Storj bucket using API Key from given Storj config file, further the uploaded file is downloaded from Storj in `(./debug)` folder. 
-```
-$ ./storj-influxdb store --debug --storj path_to_storj_config_file
-```
-**NOTE**: To restore database from the downloaded backup files after running command with `--debug` flag, you can run the following command:
+**NOTE**: To restore database from the downloaded backup files after running `store` command with `--debug` flag, you can run the following command:
 ```
 influxd restore -portable -db <old-database-name> -newdb <new-database-name> -host localhost:8088 <path_to_downloaded_backup_files>
-``` 
+```
 
 ##  Testing
 * The project has been tested on the following operating systems:

@@ -30,15 +30,19 @@ func LoadInfluxProperty(fullFileName string) ConfigInfluxDB {
 	var configInfluxDB ConfigInfluxDB
 
 	// Open the file and generate file handle.
-	fileHandle, err := os.Open(fullFileName)
+	fileHandle, err := os.Open(filepath.Clean(fullFileName))
 	if err != nil {
 		log.Fatal("Could not load influx cofig file: ", err)
 	}
-	defer fileHandle.Close()
 
 	// Decode and parse the JSON properties.
 	jsonParser := json.NewDecoder(fileHandle)
 	if err = jsonParser.Decode(&configInfluxDB); err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the file handle after reading from it.
+	if err = fileHandle.Close(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -54,12 +58,10 @@ func LoadInfluxProperty(fullFileName string) ConfigInfluxDB {
 	return configInfluxDB
 }
 
-// ConnectToDB will connect to a InfluxDB instance
-// with the credentials read from the configuration file,
-// creates the backup of the specified database in the configuration file
+// CreateBackup creates the backup of the specified database in the configuration file
 // and stores the backup file names in a slice inside the reader object.
-// It returns a reference to an io.Reader object embedded with InfluxDB instance information
-func ConnectToDB(configInfluxDB ConfigInfluxDB) []string {
+// It returns a slice of string containing back-up file names.
+func CreateBackup(configInfluxDB ConfigInfluxDB) []string {
 
 	// Path to a temporary directory to store the backup files into.
 	backupPath := filepath.Join(os.TempDir(), configInfluxDB.Database)
@@ -75,8 +77,9 @@ func ConnectToDB(configInfluxDB ConfigInfluxDB) []string {
 	if err != nil {
 		log.Fatalf("Export failed to execute. Error was: %s", err)
 	}
-	fmt.Println("\nSuccessfully connected to InfluxDB!")
+	fmt.Println("\nBackup created successfully")
 
+	// Store the back-up file names in a slice.
 	var files []string
 	err = filepath.Walk(backupPath, visit(&files))
 	if err != nil {

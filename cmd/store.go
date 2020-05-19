@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// storeCmd represents the store command
+// storeCmd represents the store command.
 var storeCmd = &cobra.Command{
 	Use:   "store",
 	Short: "Command to upload data to storjV3 network.",
@@ -17,6 +17,8 @@ var storeCmd = &cobra.Command{
 }
 
 func init() {
+
+	// Setup the store command with its flags.
 	rootCmd.AddCommand(storeCmd)
 	var defaultInfluxFile string
 	var defaultStorjFile string
@@ -28,44 +30,44 @@ func init() {
 }
 
 func influxStore(cmd *cobra.Command, args []string) {
-	fmt.Println("store called")
-	influxConfigfilePath, _ := cmd.Flags().GetString("influx")
-	fmt.Println(influxConfigfilePath)
-	fullFileNameStorj, _ := cmd.Flags().GetString("storj")
-	fmt.Println(fullFileNameStorj)
-	useAccessKey, _ := cmd.Flags().GetBool("accesskey")
-	fmt.Println(useAccessKey)
-	useAccessShare, _ := cmd.Flags().GetBool("share")
-	fmt.Println(useAccessShare)
-	useDebug, _ := cmd.Flags().GetBool("debug")
-	fmt.Println(useDebug)
 
-	// Read InfluxDB instance's properties from an external file.
+	// Process arguments from the CLI.
+	influxConfigfilePath, _ := cmd.Flags().GetString("influx")
+	fullFileNameStorj, _ := cmd.Flags().GetString("storj")
+	useAccessKey, _ := cmd.Flags().GetBool("accesskey")
+	useAccessShare, _ := cmd.Flags().GetBool("share")
+	useDebug, _ := cmd.Flags().GetBool("debug")
+
+	// Read InfluxDB instance's configurations from an external file and create an InfluxDB configuration object.
 	configInfluxDB := LoadInfluxProperty(influxConfigfilePath)
 
-	// Establish connection with InfluxDB and get file names to be uploaded.
-	filesToUpload := ConnectToDB(configInfluxDB)
-
-	// Create storj configuration object.
+	// Read storj network configurations from and external file and create a storj configuration object.
 	storjConfig := LoadStorjConfiguration(fullFileNameStorj)
 
 	// Connect to storj network using the specified credentials.
 	access, project := ConnectToStorj(fullFileNameStorj, storjConfig, useAccessKey)
 
+	// Create back-up of InfluxDB database and get file names to be uploaded.
+	filesToUpload := CreateBackup(configInfluxDB)
+
+	fmt.Printf("\nInitiating back-up.\n")
 	// Fetch all backup files from InfluxDB instance and simultaneously store them into desired Storj bucket.
 	for i := 1; i <= len(filesToUpload)-1; i++ {
 		fileName := filepath.Base(filesToUpload[i])
 		uploadFileName := path.Join(configInfluxDB.Database, fileName)
 		UploadData(project, storjConfig, uploadFileName, filesToUpload[i])
 	}
+	fmt.Printf("\nBack-up complete.\n\n")
 
 	// Download the uploaded data if debug is provided as argument.
 	if useDebug {
+		fmt.Printf("Initiating download.\n\n")
 		for i := 1; i <= len(filesToUpload)-1; i++ {
 			fileName := filepath.Base(filesToUpload[i])
 			downloadFileName := path.Join(configInfluxDB.Database, fileName)
 			DownloadData(project, storjConfig, downloadFileName)
 		}
+		fmt.Printf("\nDownload completed and stored inside debug folder.\n")
 	}
 
 	// Create restricted shareable serialized access if share is provided as argument.

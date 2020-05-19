@@ -45,16 +45,21 @@ type ConfigStorj struct {
 func LoadStorjConfiguration(fullFileName string) ConfigStorj {
 
 	var configStorj ConfigStorj
-	fileHandle, err := os.Open(fullFileName)
+	fileHandle, err := os.Open(filepath.Clean(fullFileName))
 	if err != nil {
 		log.Fatal("Could not load storj config file: ", err)
 	}
-	defer fileHandle.Close()
 
 	jsonParser := json.NewDecoder(fileHandle)
 	if err = jsonParser.Decode(&configStorj); err != nil {
 		log.Fatal(err)
 	}
+
+	// Close the file handle after reading from it.
+	if err = fileHandle.Close(); err != nil {
+		log.Fatal(err)
+	}
+
 	// Display storj configuration read from file.
 	fmt.Println("\nRead Storj configuration from the ", fullFileName, " file")
 	fmt.Println("\nAPI Key\t\t: ", configStorj.APIKey)
@@ -120,37 +125,35 @@ func ConnectToStorj(fullFileName string, configStorj ConfigStorj, accesskey bool
 	var err error
 
 	if accesskey {
-		fmt.Println("\nRequesting access to storj network using Serialized access.")
+		fmt.Println("\nConnecting to Storj network using Serialized access.")
 		// Generate access handle using serialized access.
 		access, err = uplink.ParseAccess(configStorj.SerializedAccess)
 		if err != nil {
-			log.Fatal("Could not parse access: ", err)
+			log.Fatal(err)
 		}
 	} else {
-		fmt.Println("\nRequesting access to storj network using Api key.")
+		fmt.Println("\nConnecting to Storj network.")
 		// Generate access handle using API key, satellite url and encryption passphrase.
 		access, err = cfg.RequestAccessWithPassphrase(ctx, configStorj.Satellite, configStorj.APIKey, configStorj.EncryptionPassphrase)
 		if err != nil {
-			log.Fatal("Could not request access grant: ", err)
+			log.Fatal(err)
 		}
 	}
-	fmt.Println("Access to storj, granted.")
 
-	fmt.Println("\nOpening new project.")
 	// Open a new porject.
 	project, err := cfg.OpenProject(ctx, access)
 	if err != nil {
-		log.Fatal("Could not open project:", err)
+		log.Fatal(err)
 	}
 	defer project.Close()
 
-	fmt.Println("\nOpening Bucket: ", configStorj.Bucket)
 	// Ensure the desired Bucket within the Project
 	_, err = project.EnsureBucket(ctx, configStorj.Bucket)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	fmt.Println("Successfully connected to Storj network.")
 	return access, project
 }
 
@@ -159,27 +162,25 @@ func UploadData(project *uplink.Project, configStorj ConfigStorj, uploadFileName
 
 	ctx := context.Background()
 
-	fmt.Println("\nUpload Object Path: ", configStorj.UploadPath+uploadFileName)
-
 	// Create an upload handle.
 	upload, err := project.UploadObject(ctx, configStorj.Bucket, configStorj.UploadPath+uploadFileName, nil)
 	if err != nil {
 		log.Fatal("Could not initiate upload : ", err)
 	}
-	fmt.Println("\nUploading of the object to the Storj bucket: Initiated...")
+	fmt.Printf("\nUploading %s to %s.", configStorj.UploadPath+uploadFileName, configStorj.Bucket)
 
 	var lastIndex int64
 	var numOfBytesRead int
 	lastIndex = 0
 	var buf = make([]byte, 32768)
 
-	fileReader, err := os.Open(filePath)
+	fileReader, err := os.Open(filepath.Clean(filePath))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var err1 error
-	// Loop to append to backup file contents to the upload object.
+	// Loop to read the backup file in chunks and append the contents to the upload object.
 	for err1 != io.EOF {
 		sectionReader := io.NewSectionReader(fileReader, lastIndex, int64(cap(buf)))
 		numOfBytesRead, err1 = sectionReader.ReadAt(buf, 0)
@@ -203,21 +204,23 @@ func UploadData(project *uplink.Project, configStorj ConfigStorj, uploadFileName
 
 		lastIndex = lastIndex + int64(numOfBytesRead)
 	}
-	fmt.Println("\nCommiting Object on storj V3 Network")
+
 	// Commit the upload after copying the complete content of the backup file to upload object.
+	fmt.Println("\nPlease wait while the upload is being committed to Storj.")
 	err = upload.Commit()
 	if err != nil {
 		log.Fatal("Could not commit object upload : ", err)
 	}
 
-	fileReader.Close()
+	// Close file handle after reading from it.
+	if err = fileReader.Close(); err != nil {
+		log.Fatal(err)
+	}
 
 	// Delete the temporary file ftom local disk after uploading.
 	if err = os.Remove(filePath); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Uploading object to Storj bucket: Completed!")
 }
 
 // DownloadData function downloads the data from storj bucket after upload to verify data is uploaded successfully.
@@ -232,15 +235,18 @@ func DownloadData(project *uplink.Project, configStorj ConfigStorj, downloadFile
 	var buf = make([]byte, 32768)
 	lastIndex = 0
 
+	// To retrieve information(mainly size) of the uploaded object.
 	object, err := project.StatObject(ctx, configStorj.Bucket, configStorj.UploadPath+downloadFileName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	fmt.Printf("Downloading %s.\n", file)
+
 	// Loop to read the object in chunks and store the read data in a byte array.
 	for int64(len(receivedContents)) < object.System.ContentLength {
 		var download *uplink.Download
-		retry := 0
+		var retry = 0
 		// Try to download data from storj n number of times
 		for retry < MAXRETRY {
 			download, err = project.DownloadObject(ctx, configStorj.Bucket, configStorj.UploadPath+downloadFileName, &uplink.DownloadOptions{Offset: lastIndex, Length: int64(cap(buf))})
@@ -259,29 +265,30 @@ func DownloadData(project *uplink.Project, configStorj ConfigStorj, downloadFile
 			break
 		}
 
+		// Append the read bytes to a single slice to write into the local file at once.
 		receivedContents = append(receivedContents, data...)
 		lastIndex = lastIndex + int64(len(data))
 	}
 
+	// Create the debug directory if not exists.
 	if _, err := os.Stat("./debug"); os.IsNotExist(err) {
-		err1 := os.Mkdir("./debug", 0755)
+		err1 := os.Mkdir("./debug", 0750)
 		if err1 != nil {
 			log.Fatal("Invalid Download Path: ", err1)
 		}
 	}
 	if _, err := os.Stat("./debug" + "/" + directory); os.IsNotExist(err) {
-		err1 := os.Mkdir("./debug"+"/"+directory, 0755)
+		err1 := os.Mkdir("./debug"+"/"+directory, 0750)
 		if err1 != nil {
 			log.Fatal("Invalid Download Path: ", err1)
 		}
 	}
 
 	// Create/open file in append mode.
-	downloadFileDisk, err := os.OpenFile(filepath.Join("./debug", directory, file), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0755)
+	downloadFileDisk, err := os.OpenFile(filepath.Join("./debug", directory, file), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0750)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer downloadFileDisk.Close()
 
 	// Write the contents retrieved from downloaded object to file on local disk.
 	_, err = downloadFileDisk.Write(receivedContents)
@@ -289,6 +296,9 @@ func DownloadData(project *uplink.Project, configStorj ConfigStorj, downloadFile
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Downloaded %d bytes of data.\n", len(receivedContents))
-	fmt.Printf("Debug file \"%s\" downloaded to \"%s\"\n\n", downloadFileName, "debug/")
+	// Close the file handle after reading from it.
+	if err = downloadFileDisk.Close(); err != nil {
+		log.Fatal(err)
+	}
+
 }
