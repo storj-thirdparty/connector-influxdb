@@ -1,8 +1,0 @@
-{ 
-    "hostname": "localhost",
-    "port":     "8086",
-    "username": "",
-    "password": "",
-    "database": "StorjTest",
-    "influxdExeutablePath": "/usr/local/bin/influxd"
-}
