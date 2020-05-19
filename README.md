@@ -1,4 +1,4 @@
-# storj-influxdb
+# storj-influxdb -
 
 # Developed using uplink RC v1.0.5
 
