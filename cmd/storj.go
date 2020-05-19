@@ -285,7 +285,7 @@ func DownloadData(project *uplink.Project, configStorj ConfigStorj, downloadFile
 	}
 
 	// Create/open file in append mode.
-	downloadFileDisk, err := os.OpenFile(filepath.Join("./debug", directory, file), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0750)
+	downloadFileDisk, err := os.OpenFile(filepath.Join("./debug", directory, file), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
