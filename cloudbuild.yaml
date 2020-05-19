@@ -6,18 +6,18 @@ steps:
     name: "gcr.io/cloud-builders/go"
     args: ["version"]
     env: ["GOPATH=."]  
- #- id: go_linter
- #   name: "golangci/golangci-lint"
- #   args: ["golangci-lint","run"]  
- #   env: ["GO111MODULE=on", "CGO_ENABLED=0"]
+  - id: go_linter
+    name: "golangci/golangci-lint"
+    args: ["golangci-lint","run"]  
+    env: ["GO111MODULE=on", "CGO_ENABLED=0"]
 #  - id: go_test
 #    name: "gcr.io/cloud-builders/go"
 #    args: ["test","helloworld"]
 #    env: ["GOPATH=."]  
   - id: go_security
     name: "securego/gosec"
-    args: ["helloworld"]
-    env: ["GOPATH=."]  
+    args: ["./..."]
+#    env: ["GOPATH=."]  
   - id: go_build
     name: "mirror.gcr.io/library/golang"
     env: ['GO111MODULE=on']
