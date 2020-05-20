@@ -42,7 +42,19 @@ Inside the `./config` directory a `storj_config.json` file, with Storj network c
 
 ## Run
 
-Once you have built the project run the following commands as per your requirement:
+
+
+Backups are iterated through and upload in 32KB chunks to the Storj network.
+
+The following flags  can be used with the `store` command:
+
+* `accesskey` - Connects to Storj network using instead of Serialized Access Key instead of API key, satellite url and encryption passphrase .
+* `shared` - Generates a restricted shareable serialized access with the restrictions specified in the Storj configuration file.
+* `debug` - Download the uploaded backup files to local disk inside project_folder/debug folder.
+
+
+
+Once you have built the project you can run the following:
 
 ##### Get help
 
@@ -107,4 +119,6 @@ The project has been tested on the following operating systems:
 		* Version: 16.04 LTS
 		* Processor: AMD A6-7310 APU with AMD Radeon R4 Graphics × 4
 ```
+
+
 

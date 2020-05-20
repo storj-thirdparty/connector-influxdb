@@ -21,14 +21,6 @@ Available Commands:
 
 `store` - Connect to the specified database (default: `db_property.json`).  Backups of the database are generated using tooling provided by InfluxDB then uploaded to the Storj network.  Connect to a Storj v3 network using the access specified in the Storj configuration file (default: `storj_config.json`). 
 
- Backups are iterated through  and upload  in 32KB chunks to the Storj network.
-
-The following flags  can be used with the `store` command:
-
-* `accesskey` - Connects to Storj network using instead of Serialized Access Key instead of API key, satellite url and encryption passphrase .
-* `shared` - Generates a restricted shareable serialized access with the restrictions specified in the Storj configuration file.
-* `debug` - Download the uploaded backup files to local disk inside project_folder/debug folder.
-
 
 
 Sample configuration files are provided in the `./config` folder. 
