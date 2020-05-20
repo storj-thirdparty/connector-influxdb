@@ -1,6 +1,6 @@
 ## Flow Diagram
 
-
+![](https://github.com/utropicmedia/storj-influxdb/blob/master/README.assets/arch.drawio.svg)
 
 ## Config Files
 
