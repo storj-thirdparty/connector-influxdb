@@ -17,7 +17,7 @@ steps:
     name: "mirror.gcr.io/library/golang"
     env: ['GO111MODULE=on']
     args: ['go', 'build', './...']
- - name: 'ubuntu'
+  - name: "ubuntu"
     args: ['bash', './test/doc-check.bash']
 
 #   name: "gcr.io/cloud-builders/go"
