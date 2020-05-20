@@ -26,7 +26,7 @@ func init() {
 	storeCmd.Flags().BoolP("share", "s", false, "For generating share access of the uploaded backup file.")
 	storeCmd.Flags().BoolP("debug", "d", false, "For debugging purpose only.")
 	storeCmd.Flags().StringVarP(&defaultInfluxFile, "influx", "i", "././config/db_property.json", "full filepath contaning Influxdb configuration.")
-	storeCmd.Flags().StringVarP(&defaultStorjFile, "storj", "u", "././config/storj_config.json", "full filepath contaning storj V3 configuration.")
+	storeCmd.Flags().StringVarP(&defaultStorjFile, "storj", "u", "././config/storj_config.json", "full filepath contaning Storj V3 configuration.")
 }
 
 func influxStore(cmd *cobra.Command, args []string) {
