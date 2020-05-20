@@ -18,7 +18,7 @@ steps:
     env: ['GO111MODULE=on']
     args: ['go', 'build', './...']
   - name: "ubuntu"
-    args: ['bash', './test/doc-check.bash']
+    args: ['bash', './test/doc-check.sh']
 
 #   name: "gcr.io/cloud-builders/go"
 #   args: ["build"]
