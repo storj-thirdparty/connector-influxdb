@@ -21,7 +21,7 @@ Available Commands:
 
 `store` - Connect to the specified database (default: `db_property.json`).  Backups of the database are generated using tooling provided by InfluxDB then uploaded to the Storj network.  Connect to a Storj v3 network using the access specified in the Storj configuration file (default: `storj_config.json`). 
 
-Sample configuration files are provided in the `./config` folder.  Backups are iterated through  and upload  in 32KB chunks to the Storj network.
+ Backups are iterated through  and upload  in 32KB chunks to the Storj network.
 
 The following flags  can be used with the `store` command:
 
@@ -31,9 +31,13 @@ The following flags  can be used with the `store` command:
 
 
 
-## Requirements
+Sample configuration files are provided in the `./config` folder. 
 
-To build from scratch, [install Go](https://golang.org/doc/install#install). 
+
+
+## Requirements and Install
+
+To build from scratch, [install the latest Go](https://golang.org/doc/install#install). 
 
 > Note: Ensure go modules are enabled (GO111MODULE=on)
 
@@ -63,6 +67,7 @@ go build
 ```
 go get github.com/storj-thridparty/connector-influxdb
 ```
+
 
 
 ## Run (short version)
