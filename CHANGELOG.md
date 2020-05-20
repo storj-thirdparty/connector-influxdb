@@ -1,4 +1,5 @@
-# Storj-influxdb Changelog
+# connector-influxdb Changelog
+
 
 ## [1.0.5] - 18-05-2020
 ### Changelog:
@@ -8,6 +9,7 @@
 * Added `--accesskey` flag and removed `key`, `test` and `parse` flags.
 * Added `--storj` flag to set storj config file path and `--influx` to set influx config file path.
 * Fixed bugs
+* Repo rename
 
 ## [1.0.2] - 31-01-2020
 ### Changelog:

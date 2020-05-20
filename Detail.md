@@ -1,3 +1,5 @@
+## Flow Diagram
+
 
 
 ## Config Files
@@ -39,37 +41,37 @@ Once you have built the project run the following commands as per your requireme
 ##### Get help
 
 ```
-$ ./storj-influxdb --help
+$ ./connector-influxdb --help
 ```
 
 ##### Check version
 
 ```
-$ ./storj-influxdb --version
+$ ./connector-influxdb --version
 ```
 
 ##### Create backup from InfluxDB and upload them to Storj
 
 ```
-$ ./storj-influxdb store --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
+$ ./connector-influxdb store --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
 ```
 
 ##### Create backup files from InfluxDB and upload them to Storj bucket using Access Key
 
 ```
-$ ./storj-influxdb store --accesskey
+$ ./connector-influxdb store --accesskey
 ```
 
 ##### Create backup files from InfluxDB and upload them to Storj and generate a Shareable Access Key based on restrictions in `storj_config.json`.
 
 ```
-$ ./storj-influxdb store --share
+$ ./connector-influxdb store --share
 ```
 
 ##### Create backup files from InfluxDB and upload them to Storj, then download them to `./debug` folder.
 
 ```
-$ ./storj-influxdb store --debug --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
+$ ./connector-influxdb store --debug --influx <path_to_influx_config_file> --storj <path_to_storj_config_file>
 ```
 
 

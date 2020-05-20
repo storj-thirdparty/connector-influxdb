@@ -2,15 +2,16 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "storj-influxdb",
-	Short: "Backup InfluxDB table to the decentralized Storj network.",
-	Long:  `Storj-InfluxDB Connector - Backup your InfluxDB tables to the decentralized Storj network.`,
+	Use:   "connector-influxdb",
+	Short: "Backup InfluxDB table to the decentralized Storj V3 network.",
+	Long:  `connector-influxdb  - Backup your InfluxDB tables to the decentralized Storj network.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

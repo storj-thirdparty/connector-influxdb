@@ -1,4 +1,4 @@
-module github.com/utropicmedia/storj-influxdb
+module github.com/storj-thirdparty/connector-influxdb
 
 go 1.13
 

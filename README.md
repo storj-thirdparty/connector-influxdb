@@ -1,6 +1,6 @@
 ## connector-influxdb (uplink v1.0.5)
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/utropicmedia/storj-influxdb)](https://goreportcard.com/report/github.com/utropicmedia/storj-influxdb)
+[![Go Report Card](https://goreportcard.com/badge/github.com/storj-thirdparty/connector-influxdb)](https://goreportcard.com/report/github.com/storj-thirdparty/connector-influxdb)
 
 ## Overview
 
@@ -61,7 +61,7 @@ go build
  To download the project inside your GOPATH use the following command:
 
 ```
-go get github.com/utropicmedia/storj-influxdb
+go get github.com/storj-thridparty/connector-influxdb
 ```
 
 
@@ -72,19 +72,19 @@ Once you have built the project run the following commands as per your requireme
 ##### Get help
 
 ```
-$ ./storj-influxdb --help
+$ ./connector-influxdb --help
 ```
 
 ##### Check version
 
 ```
-$ ./storj-influxdb --version
+$ ./connector-influxdb --version
 ```
 
 ##### Create backup from InfluxDB and upload to Storj
 
 ```
-$ ./storj-influxdb store 
+$ ./connector-influxdb store 
 ```
 
 
@@ -93,8 +93,8 @@ $ ./storj-influxdb store
 
 For more information on runtime flags, configuration, testing, and diagrams, check out the [Detail](//github.com/storj-thirdparty/wiki/Detail) or jump to:
 
-* [Config Files](//github.com/storj-thirdparty/wiki/Detail#config-files)
-* [Run](//github.com/storj-thirdparty/wiki/Detail#run)
-* [Testing](//github.com/storj-thirdparty/wiki/Detail#testing)
-* [Flow Diagram](//github.com/storj-thirdparty/wiki/Detail#flow-diagram)
+* [Config Files](//github.com/storj-thirdparty/connector-influxdb/wiki/Detail#config-files)
+* [Run](//github.com/storj-thirdparty/connector-influxdb/wiki/Detail#run)
+* [Testing](//github.com/storj-thirdparty/connector-influxdb/wiki/Detail#testing)
+* [Flow Diagram](//github.com/storj-thirdparty/connector-influxdb/wiki/Detail#flow-diagram)
 
