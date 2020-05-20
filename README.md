@@ -94,7 +94,7 @@ $ ./connector-influxdb store
 For more information on runtime flags, configuration, testing, and diagrams, check out the [Detail](//github.com/storj-thirdparty/wiki/Detail) or jump to:
 
 * [Config Files](//github.com/utropicmedia/storj-influxdb/wiki/#config-files)
-* [Run](//github.com/utropicmedia/storj-influxdb/wiki/#run)
+* [Run (long version)](//github.com/utropicmedia/storj-influxdb/wiki/#run)
 * [Testing](//github.com/utropicmedia/storj-influxdb/wiki/#testing)
 * [Flow Diagram](//github.com/utropicmedia/storj-influxdb/wiki/#flow-diagram)
 
