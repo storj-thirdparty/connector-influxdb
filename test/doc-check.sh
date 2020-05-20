@@ -1,5 +1,5 @@
 pwd
-if [[ -f "../README.assets/Home.md" ]]; then
+if [[ -f "./README.assets/Home.md" ]]; then
     echo "yes"
 
     exit 0
