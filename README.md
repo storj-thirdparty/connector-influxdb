@@ -1,6 +1,6 @@
 ## connector-influxdb (uplink v1.0.5)
 
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/utropicmedia/storj-influxdb)](https://goreportcard.com/report/github.com/utropicmedia/storj-influxdb)
 
 ## Overview
 
