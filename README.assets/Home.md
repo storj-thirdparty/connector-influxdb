@@ -6,6 +6,10 @@
 
 There are two config files that contain Storj network and InfluxDB connection information.  The tool is designed so you can specify a config file as part of your tooling/workflow.  
 
+
+
+##### `db_property.json`
+
 Inside the `./config` directory there is a  `db_property.json` file, with following information about your InfluxDB instance:
 
 * `hostName`- Host Name connect to InfluxDB
@@ -16,6 +20,8 @@ Inside the `./config` directory there is a  `db_property.json` file, with follow
 * `influxdExeutablePath`- Path to the influxd executable including the executble name
 
 
+
+##### `storj_config.json`
 
 Inside the `./config` directory a `storj_config.json` file, with Storj network configuration information in JSON format:
 
