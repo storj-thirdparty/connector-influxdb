@@ -1,6 +1,7 @@
 ## connector-influxdb (uplink v1.0.5)
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/storj-thirdpary/connector/influxdb)](https://goreportcard.com/report/github.com/storj-thirdparty/connector-influxdb)
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/storj-thirdparty/connector-influxdb)](https://goreportcard.com/report/github.com/storj-thirdparty/connector-influxdb)
 
 ## Overview
 
