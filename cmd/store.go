@@ -24,7 +24,6 @@ func init() {
 	var defaultStorjFile string
 	storeCmd.Flags().BoolP("accesskey", "a", false, "Connect to storj using access key(default connection method is by using API Key).")
 	storeCmd.Flags().BoolP("share", "s", false, "For generating share access of the uploaded backup file.")
-	storeCmd.Flags().BoolP("debug", "d", false, "For debugging purpose only.")
 	storeCmd.Flags().StringVarP(&defaultInfluxFile, "influx", "i", "././config/db_property.json", "full filepath contaning Influxdb configuration.")
 	storeCmd.Flags().StringVarP(&defaultStorjFile, "storj", "u", "././config/storj_config.json", "full filepath contaning Storj V3 configuration.")
 }
@@ -36,7 +35,6 @@ func influxStore(cmd *cobra.Command, args []string) {
 	fullFileNameStorj, _ := cmd.Flags().GetString("storj")
 	useAccessKey, _ := cmd.Flags().GetBool("accesskey")
 	useAccessShare, _ := cmd.Flags().GetBool("share")
-	useDebug, _ := cmd.Flags().GetBool("debug")
 
 	// Read InfluxDB instance's configurations from an external file and create an InfluxDB configuration object.
 	configInfluxDB := LoadInfluxProperty(influxConfigfilePath)
@@ -58,17 +56,6 @@ func influxStore(cmd *cobra.Command, args []string) {
 		UploadData(project, storjConfig, uploadFileName, filesToUpload[i])
 	}
 	fmt.Printf("\nBack-up complete.\n\n")
-
-	// Download the uploaded data if debug is provided as argument.
-	if useDebug {
-		fmt.Printf("Initiating download.\n\n")
-		for i := 1; i <= len(filesToUpload)-1; i++ {
-			fileName := filepath.Base(filesToUpload[i])
-			downloadFileName := path.Join(configInfluxDB.Database, fileName)
-			DownloadData(project, storjConfig, downloadFileName)
-		}
-		fmt.Printf("\nDownload completed and stored inside debug folder.\n")
-	}
 
 	// Create restricted shareable serialized access if share is provided as argument.
 	if useAccessShare {

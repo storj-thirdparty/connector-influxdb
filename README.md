@@ -1,7 +1,6 @@
 ## connector-influxdb (uplink v1.0.5)
 
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/storj-thirdparty/connector-influxdb)](https://goreportcard.com/report/github.com/storj-thirdparty/connector-influxdb)
+[![Go Report Card](https://goreportcard.com/badge/github.com/utropicmedia/storj-influxdb)](https://goreportcard.com/report/github.com/utropicmedia/storj-influxdb)
 
 ## Overview
 
@@ -13,24 +12,24 @@ Usage:
 
 Available Commands:
   help        Help about any command
-  store       Command to upload data to a Storj V3 network.
+  store       Command to upload data to a Storj V3 network
   version     Prints the version of the tool
 
 ```
 
 
 
-`store` - Connect to the specified database (default: `db_property.json`).  Backups of the database are generated using tooling provided by InfluxDB then uploaded to the Storj network.  Connect to a Storj v3 network using the access specified in the Storj configuration file (default: `storj_config.json`). 
+`store` - Connect to the specified database (default: `db_property.json`). Back-up files of the database are generated using tooling provided by InfluxDB then uploaded to the Storj network. Connect to a Storj v3 network using the access specified in the Storj configuration file (default: `storj_config.json`).
 
 
 
-Sample configuration files are provided in the `./config` folder. 
+Sample configuration files are provided in the `./config` folder.
 
 
 
 ## Requirements and Install
 
-To build from scratch, [install the latest Go](https://golang.org/doc/install#install). 
+To build from scratch, [install the latest Go](https://golang.org/doc/install#install).
 
 > Note: Ensure go modules are enabled (GO111MODULE=on)
 
@@ -55,7 +54,7 @@ go build
 
 #### Option #2:  ``go get`` into your gopath
 
- To download the project inside your GOPATH use the following command:
+To download the project inside your GOPATH use the following command:
 
 ```
 go get github.com/storj-thridparty/connector-influxdb
@@ -82,7 +81,7 @@ $ ./connector-influxdb --version
 ##### Create backup from InfluxDB and upload to Storj
 
 ```
-$ ./connector-influxdb store 
+$ ./connector-influxdb store
 ```
 
 
@@ -91,8 +90,7 @@ $ ./connector-influxdb store
 
 For more information on runtime flags, configuration, testing, and diagrams, check out the [Detail](//github.com/storj-thirdparty/wiki/Detail) or jump to:
 
-* [Config Files](//github.com/storj-thirdparty/connector-influxdb/wiki/#config-files)
-* [Run (long version)](//github.com/storj-thirdparty/connector-influxdb/wiki/#run)
-* [Testing](//github.com/storj-thirdparty/connector-influxdb/wiki/#testing)
-* [Flow Diagram](//github.com/storj-thirdparty/connector-influxdb/wiki/#flow-diagram)
-
+* [Config Files](//github.com/utropicmedia/storj-influxdb/wiki/#config-files)
+* [Run (long version)](//github.com/utropicmedia/storj-influxdb/wiki/#run)
+* [Testing](//github.com/utropicmedia/storj-influxdb/wiki/#testing)
+* [Flow Diagram](//github.com/utropicmedia/storj-influxdb/wiki/#flow-diagram)

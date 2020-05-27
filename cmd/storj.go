@@ -4,12 +4,10 @@
 package cmd
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,9 +16,6 @@ import (
 
 	"storj.io/uplink"
 )
-
-// DEBUG allows more detailed working to be exposed through the terminal.
-var DEBUG = false
 
 // MAXRETRY defines number of times to try upload data to storj before throwing error
 var MAXRETRY = 5
@@ -169,40 +164,15 @@ func UploadData(project *uplink.Project, configStorj ConfigStorj, uploadFileName
 	}
 	fmt.Printf("\nUploading %s to %s.", configStorj.UploadPath+uploadFileName, configStorj.Bucket)
 
-	var lastIndex int64
-	var numOfBytesRead int
-	lastIndex = 0
-	var buf = make([]byte, 32768)
-
 	fileReader, err := os.Open(filepath.Clean(filePath))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var err1 error
-	// Loop to read the backup file in chunks and append the contents to the upload object.
-	for err1 != io.EOF {
-		sectionReader := io.NewSectionReader(fileReader, lastIndex, int64(cap(buf)))
-		numOfBytesRead, err1 = sectionReader.ReadAt(buf, 0)
-		if numOfBytesRead > 0 {
-			reader := bytes.NewBuffer(buf[0:numOfBytesRead])
-			// Try to upload data on storj n number of times
-			retry := 0
-			for retry < MAXRETRY {
-				_, err = io.Copy(upload, reader)
-				if err != nil {
-					retry++
-				} else {
-					break
-				}
-			}
-			if retry == MAXRETRY {
-				log.Fatal("Could not upload data to storj: ", err)
-			}
-
-		}
-
-		lastIndex = lastIndex + int64(numOfBytesRead)
+	_, err = io.Copy(upload, fileReader)
+	if err != nil {
+		abortErr := upload.Abort()
+		log.Fatal("Could not upload data to storj: ", err, abortErr)
 	}
 
 	// Commit the upload after copying the complete content of the backup file to upload object.
@@ -221,84 +191,4 @@ func UploadData(project *uplink.Project, configStorj ConfigStorj, uploadFileName
 	if err = os.Remove(filePath); err != nil {
 		log.Fatal(err)
 	}
-}
-
-// DownloadData function downloads the data from storj bucket after upload to verify data is uploaded successfully.
-func DownloadData(project *uplink.Project, configStorj ConfigStorj, downloadFileName string) {
-
-	ctx := context.Background()
-
-	directory, file := filepath.Split(downloadFileName)
-
-	var receivedContents = []byte{}
-	var lastIndex int64
-	var buf = make([]byte, 32768)
-	lastIndex = 0
-
-	// To retrieve information(mainly size) of the uploaded object.
-	object, err := project.StatObject(ctx, configStorj.Bucket, configStorj.UploadPath+downloadFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Downloading %s.\n", file)
-
-	// Loop to read the object in chunks and store the read data in a byte array.
-	for int64(len(receivedContents)) < object.System.ContentLength {
-		var download *uplink.Download
-		var retry = 0
-		// Try to download data from storj n number of times
-		for retry < MAXRETRY {
-			download, err = project.DownloadObject(ctx, configStorj.Bucket, configStorj.UploadPath+downloadFileName, &uplink.DownloadOptions{Offset: lastIndex, Length: int64(cap(buf))})
-			if err != nil {
-				retry++
-			} else {
-				break
-			}
-		}
-		if retry == MAXRETRY {
-			log.Fatal("Could not download data form storj: ", err)
-		}
-
-		data, err2 := ioutil.ReadAll(download)
-		if err2 != nil {
-			break
-		}
-
-		// Append the read bytes to a single slice to write into the local file at once.
-		receivedContents = append(receivedContents, data...)
-		lastIndex = lastIndex + int64(len(data))
-	}
-
-	// Create the debug directory if not exists.
-	if _, err := os.Stat("./debug"); os.IsNotExist(err) {
-		err1 := os.Mkdir("./debug", 0750)
-		if err1 != nil {
-			log.Fatal("Invalid Download Path: ", err1)
-		}
-	}
-	if _, err := os.Stat("./debug" + "/" + directory); os.IsNotExist(err) {
-		err1 := os.Mkdir("./debug"+"/"+directory, 0750)
-		if err1 != nil {
-			log.Fatal("Invalid Download Path: ", err1)
-		}
-	}
-
-	// Create/open file in append mode.
-	downloadFileDisk, err := os.OpenFile(filepath.Join("./debug", directory, file), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Write the contents retrieved from downloaded object to file on local disk.
-	_, err = downloadFileDisk.Write(receivedContents)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Close the file handle after reading from it.
-	if err = downloadFileDisk.Close(); err != nil {
-		log.Fatal(err)
-	}
-
 }
