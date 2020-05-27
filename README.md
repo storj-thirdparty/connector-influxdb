@@ -1,6 +1,6 @@
 ## connector-influxdb (uplink v1.0.5)
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/utropicmedia/storj-influxdb)](https://goreportcard.com/report/github.com/utropicmedia/storj-influxdb)
+[![Go Report Card](https://goreportcard.com/badge/github.com/storj-thirdparty/connector-influxdb)](https://goreportcard.com/report/github.com/storj-thirdparty/connector-influxdb)
 
 ## Overview
 
@@ -92,5 +92,5 @@ For more information on runtime flags, configuration, testing, and diagrams, che
 
 * [Config Files](//github.com/storj-thirdparty/connector-influxdb/wiki/#config-files)
 * [Run (long version)](//github.com/storj-thirdparty/connector-influxdb/wiki/#run)
-* [Testing](//github.com/ustorj-thirdparty/connector-influxdb/wiki/#testing)
+* [Testing](//github.com/storj-thirdparty/connector-influxdb/wiki/#testing)
 * [Flow Diagram](//github.com/storj-thirdparty/connector-influxdb/wiki/#flow-diagram)
