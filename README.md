@@ -1,5 +1,6 @@
 ## connector-influxdb (uplink v1.0.5)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0e808e60a4a4ab79c9fa0fd188b3171)](https://app.codacy.com/gh/storj-thirdparty/connector-influxdb?utm_source=github.com&utm_medium=referral&utm_content=storj-thirdparty/connector-influxdb&utm_campaign=Badge_Grade_Dashboard)
 [![Go Report Card](https://goreportcard.com/badge/github.com/utropicmedia/storj-influxdb)](https://goreportcard.com/report/github.com/utropicmedia/storj-influxdb)
 ![Cloud Build](https://storage.googleapis.com/storj-utropic-services-badges/builds/connector-influxdb/branches/master.svg)
 
