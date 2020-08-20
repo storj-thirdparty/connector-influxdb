@@ -75,7 +75,7 @@ func CreateBackup(configInfluxDB ConfigInfluxDB) []string {
 	cmd := exec.Command(configInfluxDB.InfluxdExeutablePath, "backup", "-portable", "-database", configInfluxDB.Database, "-host", configInfluxDB.HostName+":8088", backupPath)
 	_, err := cmd.Output()
 	if err != nil {
-		log.Fatalf("Export failed to execute. Error was: %s", err)
+		log.Fatal(err)
 	}
 	fmt.Println("\nBackup created successfully")
 
@@ -83,10 +83,8 @@ func CreateBackup(configInfluxDB ConfigInfluxDB) []string {
 	var files []string
 	err = filepath.Walk(backupPath, visit(&files))
 	if err != nil {
-		fmt.Println("Could not store file names:", err)
-		log.Fatalf("Export failed to execute. Error was: %s", err)
+		log.Fatal(err)
 	}
-
 	return files
 }
 
@@ -96,7 +94,6 @@ func visit(files *[]string) filepath.WalkFunc {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		*files = append(*files, path)
 		return nil
 	}

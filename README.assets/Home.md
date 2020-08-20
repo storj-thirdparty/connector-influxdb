@@ -29,7 +29,7 @@ Inside the `./config` directory a `storj_config.json` file, with Storj network c
 * `satelliteURL` - Storj Satellite URL
 * `encryptionPassphrase` - Storj Encryption Passphrase.
 * `bucketName` - Name of the bucket to upload data into.
-* `uploadPath` - Path on Storj Bucket to store data (optional) or "/"
+* `uploadPath` - Path on Storj Bucket to store data (optional) or "" or "/". (mandatory)
 * `serializedAccess` - Serialized access shared while uploading data used to access bucket without API Key
 * `allowDownload` - Set *true* to create serialized access with restricted download
 * `allowUpload` - Set *true* to create serialized access with restricted upload
