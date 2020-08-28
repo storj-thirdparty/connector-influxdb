@@ -43,7 +43,7 @@ func influxStore(cmd *cobra.Command, args []string) {
 	storjConfig := LoadStorjConfiguration(fullFileNameStorj)
 
 	// Connect to storj network using the specified credentials.
-	access, project := ConnectToStorj(fullFileNameStorj, storjConfig, useAccessKey)
+	access, project := ConnectToStorj(storjConfig, useAccessKey)
 
 	// Create back-up of InfluxDB database and get file names to be uploaded.
 	filesToUpload := CreateBackup(configInfluxDB)

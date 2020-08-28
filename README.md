@@ -19,15 +19,9 @@ Available Commands:
 
 ```
 
-
-
 `store` - Connect to the specified database(default: `db_property.json`).  Backups of the database are generated using tooling provided by InfluxDB then uploaded to the Storj network.  Connect to a Storj v3 network using the access specified in the Storj configuration file (default: `storj_config.json`). 
 
-
-
 Sample configuration files are provided in the `./config` folder. 
-
-
 
 ## Requirements and Install
 
@@ -35,9 +29,7 @@ To build from scratch, [install the latest Go](https://golang.org/doc/install#in
 
 > Note: Ensure go modules are enabled (GO111MODULE=on)
 
-
-
-#### Option #1: clone this repo (most common)
+## Option #1: clone this repo (most common)
 
 To clone the repo
 
@@ -52,8 +44,6 @@ cd connector-influxdb
 go build
 ```
 
-
-
 #### Option #2:  ``go get`` into your gopath
 
  To download the project inside your GOPATH use the following command:
@@ -61,8 +51,6 @@ go build
 ```
 go get github.com/storj-thridparty/connector-influxdb
 ```
-
-
 
 ## Run (short version)
 
@@ -85,8 +73,6 @@ $ ./connector-influxdb --version
 ```
 $ ./connector-influxdb store 
 ```
-
-
 
 ## Documentation
 
