@@ -82,4 +82,5 @@ For more information on runtime flags, configuration, testing, and diagrams, che
 * [Run (long version)](//github.com/storj-thirdparty/connector-influxdb/wiki/#run)
 * [Testing](//github.com/storj-thirdparty/connector-influxdb/wiki/#testing)
 * [Flow Diagram](//github.com/storj-thirdparty/connector-influxdb/wiki/#flow-diagram)
+* [Video](//github.com/storj-thirdparty/connector-influxdb/docs/videos)
 
